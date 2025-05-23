@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<title>index td6 : fetch</title>
+	<link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+	<main id="photo">
+		<h1>Photo : 105</h1>
+
+		<section id="la_photo">
+			<img src="">
+			<h4>titre</h4>
+			<p>description</p>
+			<p>type, defX x defY</p>
+			<h4 id="la_categorie">categorie : categorie de l'image</h4>
+			<h4>commentaires : </h4>
+			<ul id="les_commentaires">
+				<li>pseudo : Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, vitae.</li>
+				<li>pseudo : Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, recusandae.</li>
+			</ul>
+
+		</section>
+	</main>
+
+	<!-- Template de la photo -->
+<script id="photoTemplate" type="text/x-handlebars-template">
+    <img src="{{url}}" alt="{{titre}}">
+    <h4>{{titre}}</h4>
+    <p>{{description}}</p>
+    <p>{{type}}, {{largeur}} x {{hauteur}}</p>
+    <h4 id="la_categorie"></h4> 
+    <h4>Commentaires :</h4>
+    <ul id="les_commentaires"></ul>
+</script>
+
+<!-- Template de la catégorie -->
+<script id="cateTemplate" type="text/x-handlebars-template">
+    Catégorie : {{nom}}, {{id}}, {{description}}
+</script>
+
+<!-- Template du commentaire -->
+<script id="comTemplate" type="text/x-handlebars-template">
+	{{#each commentaires}}
+		<li>({{pseudo}}) {{content}}</li>
+	{{/each}}
+</script>
+
+	<!-- Template de la gallery -->
+	 <button id="load_gallery">Charger galerie</button>
+
+<script id="galleryTemplate" type="text/x-handlebars-template">
+  <div class="vignette">
+    <img src="{{thumbnail}}" alt="{{titre}}" data-photoid="{{id}}">
+  </div>
+</script>
+
+<div id="galerie"></div>
+
+
+
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script type="module" src='out.js' defer></script>
+</body>
+
+</html>
