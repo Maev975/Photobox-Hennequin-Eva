@@ -5765,6 +5765,7 @@
   async function load() {
     const gallery = await loadRessource("/www/canals5/phox/api/photos");
     console.log(gallery.photos);
+    console.log(gallery.photos[1].photo.thumbnail.href);
     console.log("load");
     return gallery;
   }
@@ -5777,11 +5778,12 @@
     const templateSource = document.getElementById("galleryTemplate").innerHTML;
     const template = import_handlebars2.default.compile(templateSource);
     galleryData.photos.forEach((photo) => {
-      const html = {
+      const data = {
         titre: photo.photo.titre,
         id: photo.photo.id,
         thumbnail: "https://webetu.iutnc.univ-lorraine.fr/" + photo.photo.thumbnail.href
       };
+      const html = template(data);
       container.insertAdjacentHTML("beforeend", html);
     });
   }

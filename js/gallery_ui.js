@@ -9,12 +9,14 @@ export function displayGallery(galleryData) {
   const template = Handlebars.compile(templateSource);
 
   galleryData.photos.forEach(photo => {
-    const html = {
+    const data = {
         titre: photo.photo.titre,
         id: photo.photo.id,
         thumbnail: "https://webetu.iutnc.univ-lorraine.fr/" + photo.photo.thumbnail.href,
 
     }
+
+    const html = template(data); 
     container.insertAdjacentHTML('beforeend', html);
   });
 }

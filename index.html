@@ -27,7 +27,7 @@
 	</main>
 
 	<!-- Template de la photo -->
-<script id="photoTemplate" type="text/x-handlebars-template">
+	<script id="photoTemplate" type="text/x-handlebars-template">
     <img src="{{url}}" alt="{{titre}}">
     <h4>{{titre}}</h4>
     <p>{{description}}</p>
@@ -37,28 +37,27 @@
     <ul id="les_commentaires"></ul>
 </script>
 
-<!-- Template de la catégorie -->
-<script id="cateTemplate" type="text/x-handlebars-template">
+	<!-- Template de la catégorie -->
+	<script id="cateTemplate" type="text/x-handlebars-template">
     Catégorie : {{nom}}, {{id}}, {{description}}
 </script>
 
-<!-- Template du commentaire -->
-<script id="comTemplate" type="text/x-handlebars-template">
+	<!-- Template du commentaire -->
+	<script id="comTemplate" type="text/x-handlebars-template">
 	{{#each commentaires}}
 		<li>({{pseudo}}) {{content}}</li>
 	{{/each}}
 </script>
 
 	<!-- Template de la gallery -->
-	 <button id="load_gallery">Charger galerie</button>
-
-<script id="galleryTemplate" type="text/x-handlebars-template">
+	<button id="load_gallery">Charger galerie</button>
+	<script id="galleryTemplate" type="text/x-handlebars-template">
   <div class="vignette">
     <img src="{{thumbnail}}" alt="{{titre}}" data-photoid="{{id}}">
   </div>
 </script>
 
-<div id="galerie"></div>
+	<div id="galerie"></div>
 
 
 
