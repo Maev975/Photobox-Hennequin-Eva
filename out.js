@@ -235,12 +235,12 @@
           if (options.data) {
             data = _utils.createFrame(options.data);
           }
-          function execIteration(field, index, last) {
+          function execIteration(field, index, last2) {
             if (data) {
               data.key = field;
               data.index = index;
               data.first = index === 0;
-              data.last = !!last;
+              data.last = !!last2;
               if (contextPath) {
                 data.contextPath = contextPath + field;
               }
@@ -1640,18 +1640,18 @@
               return (past.length > 20 ? "..." : "") + past.substr(-20).replace(/\n/g, "");
             },
             upcomingInput: function upcomingInput() {
-              var next = this.match;
-              if (next.length < 20) {
-                next += this._input.substr(0, 20 - next.length);
+              var next2 = this.match;
+              if (next2.length < 20) {
+                next2 += this._input.substr(0, 20 - next2.length);
               }
-              return (next.substr(0, 20) + (next.length > 20 ? "..." : "")).replace(/\n/g, "");
+              return (next2.substr(0, 20) + (next2.length > 20 ? "..." : "")).replace(/\n/g, "");
             },
             showPosition: function showPosition() {
               var pre = this.pastInput();
               var c = new Array(pre.length + 1).join("-");
               return pre + this.upcomingInput() + "\n" + c + "^";
             },
-            next: function next() {
+            next: function next2() {
               if (this.done) {
                 return this.EOF;
               }
@@ -2142,24 +2142,24 @@
         if (i === void 0) {
           i = body.length;
         }
-        var prev = body[i - 1], sibling = body[i - 2];
-        if (!prev) {
+        var prev2 = body[i - 1], sibling = body[i - 2];
+        if (!prev2) {
           return isRoot;
         }
-        if (prev.type === "ContentStatement") {
-          return (sibling || !isRoot ? /\r?\n\s*?$/ : /(^|\r?\n)\s*?$/).test(prev.original);
+        if (prev2.type === "ContentStatement") {
+          return (sibling || !isRoot ? /\r?\n\s*?$/ : /(^|\r?\n)\s*?$/).test(prev2.original);
         }
       }
       function isNextWhitespace(body, i, isRoot) {
         if (i === void 0) {
           i = -1;
         }
-        var next = body[i + 1], sibling = body[i + 2];
-        if (!next) {
+        var next2 = body[i + 1], sibling = body[i + 2];
+        if (!next2) {
           return isRoot;
         }
-        if (next.type === "ContentStatement") {
-          return (sibling || !isRoot ? /^\s*?\r?\n/ : /^\s*?(\r?\n|$)/).test(next.original);
+        if (next2.type === "ContentStatement") {
+          return (sibling || !isRoot ? /^\s*?\r?\n/ : /^\s*?(\r?\n|$)/).test(next2.original);
         }
       }
       function omitRight(body, i, multiple) {
@@ -3551,18 +3551,18 @@
         var previousName = 0;
         var previousSource = 0;
         var result = "";
-        var next;
+        var next2;
         var mapping;
         var nameIdx;
         var sourceIdx;
         var mappings = this._mappings.toArray();
         for (var i = 0, len = mappings.length; i < len; i++) {
           mapping = mappings[i];
-          next = "";
+          next2 = "";
           if (mapping.generatedLine !== previousGeneratedLine) {
             previousGeneratedColumn = 0;
             while (mapping.generatedLine !== previousGeneratedLine) {
-              next += ";";
+              next2 += ";";
               previousGeneratedLine++;
             }
           } else {
@@ -3570,26 +3570,26 @@
               if (!util.compareByGeneratedPositionsInflated(mapping, mappings[i - 1])) {
                 continue;
               }
-              next += ",";
+              next2 += ",";
             }
           }
-          next += base64VLQ.encode(mapping.generatedColumn - previousGeneratedColumn);
+          next2 += base64VLQ.encode(mapping.generatedColumn - previousGeneratedColumn);
           previousGeneratedColumn = mapping.generatedColumn;
           if (mapping.source != null) {
             sourceIdx = this._sources.indexOf(mapping.source);
-            next += base64VLQ.encode(sourceIdx - previousSource);
+            next2 += base64VLQ.encode(sourceIdx - previousSource);
             previousSource = sourceIdx;
-            next += base64VLQ.encode(mapping.originalLine - 1 - previousOriginalLine);
+            next2 += base64VLQ.encode(mapping.originalLine - 1 - previousOriginalLine);
             previousOriginalLine = mapping.originalLine - 1;
-            next += base64VLQ.encode(mapping.originalColumn - previousOriginalColumn);
+            next2 += base64VLQ.encode(mapping.originalColumn - previousOriginalColumn);
             previousOriginalColumn = mapping.originalColumn;
             if (mapping.name != null) {
               nameIdx = this._names.indexOf(mapping.name);
-              next += base64VLQ.encode(nameIdx - previousName);
+              next2 += base64VLQ.encode(nameIdx - previousName);
               previousName = nameIdx;
             }
           }
-          result += next;
+          result += next2;
         }
         return result;
       };
@@ -5762,12 +5762,42 @@
   }
 
   // Photobox-Hennequin-Eva/js/gallery.js
-  async function load() {
-    const gallery = await loadRessource("/www/canals5/phox/api/photos");
-    console.log(gallery.photos);
-    console.log(gallery.photos[1].photo.thumbnail.href);
-    console.log("load");
+  var currentLinks = {};
+  async function loadGallery(uri = "/www/canals5/phox/api/photos") {
+    const gallery = await loadRessource(uri);
+    currentLinks = gallery.links;
     return gallery;
+  }
+  async function load() {
+    return loadGallery();
+  }
+  function next() {
+    if (currentLinks.next) {
+      return loadGallery(currentLinks.next.href);
+    } else {
+      return Promise.reject("Pas de page suivante");
+    }
+  }
+  function prev() {
+    if (currentLinks.prev) {
+      return loadGallery(currentLinks.prev.href);
+    } else {
+      return Promise.reject("Pas de page pr\xE9c\xE9dente");
+    }
+  }
+  function first() {
+    if (currentLinks.first) {
+      return loadGallery(currentLinks.first.href);
+    } else {
+      return Promise.reject("Pas de premi\xE8re page");
+    }
+  }
+  function last() {
+    if (currentLinks.last) {
+      return loadGallery(currentLinks.last.href);
+    } else {
+      return Promise.reject("Pas de derni\xE8re page");
+    }
   }
 
   // Photobox-Hennequin-Eva/js/gallery_ui.js
@@ -5786,6 +5816,10 @@
       const html = template(data);
       container.insertAdjacentHTML("beforeend", html);
     });
+    document.getElementById("btn-next").disabled = !galleryData.links.next;
+    document.getElementById("btn-prev").disabled = !galleryData.links.prev;
+    document.getElementById("btn-first").disabled = !galleryData.links.first;
+    document.getElementById("btn-last").disabled = !galleryData.links.last;
   }
 
   // Photobox-Hennequin-Eva/js/index.js
@@ -5820,5 +5854,18 @@
   window.addEventListener("hashchange", () => {
     const id = window.location.hash.substring(1);
     if (id) getPicture(id);
+  });
+  document.getElementById("btn-next").addEventListener("click", () => {
+    console.log("Chargement de la page suivante de la galerie");
+    next().then(displayGallery).catch(console.error);
+  });
+  document.getElementById("btn-prev").addEventListener("click", () => {
+    prev().then(displayGallery).catch(console.error);
+  });
+  document.getElementById("btn-first").addEventListener("click", () => {
+    first().then(displayGallery).catch(console.error);
+  });
+  document.getElementById("btn-last").addEventListener("click", () => {
+    last().then(displayGallery).catch(console.error);
   });
 })();

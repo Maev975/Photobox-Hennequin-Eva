@@ -5,7 +5,7 @@
 
 import { loadPicture, loadRessource } from "./photoloader.js";
 import { displayCategorie, displayCommentaires, displayPicture } from "./ui.js";
-import { load} from "./gallery.js";
+import * as gallery from './gallery.js'; 
 import { displayGallery } from "./gallery_ui.js";
 
 
@@ -43,7 +43,7 @@ getPicture(105);
 
 document.getElementById("load_gallery").addEventListener("click", () => {
   console.log("Chargement de la galerie");
-  load()
+  gallery.load()
     .then((galerie) => displayGallery(galerie))
     .catch((err) => console.error("Erreur lors du chargement de la galerie :", err));
 });
@@ -52,4 +52,21 @@ document.getElementById("load_gallery").addEventListener("click", () => {
 window.addEventListener("hashchange", () => {
   const id = window.location.hash.substring(1);
   if (id) getPicture(id);
+});
+
+document.getElementById("btn-next").addEventListener("click", () => {
+  console.log("Chargement de la page suivante de la galerie");
+  gallery.next().then(displayGallery).catch(console.error);
+});
+
+document.getElementById("btn-prev").addEventListener("click", () => {
+  gallery.prev().then(displayGallery).catch(console.error);
+});
+
+document.getElementById("btn-first").addEventListener("click", () => {
+  gallery.first().then(displayGallery).catch(console.error);
+});
+
+document.getElementById("btn-last").addEventListener("click", () => {
+  gallery.last().then(displayGallery).catch(console.error);
 });

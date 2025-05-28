@@ -14,9 +14,16 @@ export function displayGallery(galleryData) {
         id: photo.photo.id,
         thumbnail: "https://webetu.iutnc.univ-lorraine.fr/" + photo.photo.thumbnail.href,
 
+      
     }
 
     const html = template(data); 
     container.insertAdjacentHTML('beforeend', html);
   });
+
+  document.getElementById("btn-next").disabled = !galleryData.links.next;
+  document.getElementById("btn-prev").disabled = !galleryData.links.prev;
+  document.getElementById("btn-first").disabled = !galleryData.links.first;
+  document.getElementById("btn-last").disabled = !galleryData.links.last;
+  
 }
