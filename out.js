@@ -5729,16 +5729,17 @@
     const templateSource = document.getElementById("photoTemplate").innerHTML;
     const template = import_handlebars.default.compile(templateSource);
     const html = template({
+      // Préparation des données pour le template
       url: "https://webetu.iutnc.univ-lorraine.fr/" + photo.photo.url.href,
       titre: photo.photo.titre,
       type: photo.photo.type,
       description: photo.photo.descr,
       hauteur: photo.photo.height,
       largeur: photo.photo.width,
-      categorie: photo.links.categorie.href
+      id: photo.photo.id
     });
-    const laPhoto = document.getElementById("la_photo");
-    laPhoto.innerHTML = html;
+    const container = document.getElementById("photoContainer");
+    container.innerHTML = html;
   }
   function displayCategorie(categorie) {
     const templateSource = document.getElementById("cateTemplate").innerHTML;
@@ -5748,53 +5749,54 @@
       description: categorie.categorie.descr,
       id: categorie.categorie.id
     });
-    const laPhoto = document.getElementById("la_categorie");
-    laPhoto.innerHTML = html;
+    const container = document.getElementById("categorieContainer");
+    container.innerHTML = html;
   }
   function displayCommentaires(com) {
     const templateSource = document.getElementById("comTemplate").innerHTML;
     const template = import_handlebars.default.compile(templateSource);
     const html = template({
       commentaires: com.comments
+      // liste des commentaires
     });
-    const laPhoto = document.getElementById("les_commentaires");
-    laPhoto.innerHTML = html;
+    const container = document.getElementById("commentaireContainer");
+    container.innerHTML = "<h4>Commentaires :</h4><ul>" + html + "</ul>";
   }
 
   // Photobox-Hennequin-Eva/js/gallery.js
-  var currentLinks = {};
+  var liensGallerie = {};
   async function loadGallery(uri = "/www/canals5/phox/api/photos") {
     const gallery = await loadRessource(uri);
-    currentLinks = gallery.links;
+    liensGallerie = gallery.links;
     return gallery;
   }
   async function load() {
     return loadGallery();
   }
   function next() {
-    if (currentLinks.next) {
-      return loadGallery(currentLinks.next.href);
+    if (liensGallerie.next) {
+      return loadGallery(liensGallerie.next.href);
     } else {
       return Promise.reject("Pas de page suivante");
     }
   }
   function prev() {
-    if (currentLinks.prev) {
-      return loadGallery(currentLinks.prev.href);
+    if (liensGallerie.prev) {
+      return loadGallery(liensGallerie.prev.href);
     } else {
       return Promise.reject("Pas de page pr\xE9c\xE9dente");
     }
   }
   function first() {
-    if (currentLinks.first) {
-      return loadGallery(currentLinks.first.href);
+    if (liensGallerie.first) {
+      return loadGallery(liensGallerie.first.href);
     } else {
       return Promise.reject("Pas de premi\xE8re page");
     }
   }
   function last() {
-    if (currentLinks.last) {
-      return loadGallery(currentLinks.last.href);
+    if (liensGallerie.last) {
+      return loadGallery(liensGallerie.last.href);
     } else {
       return Promise.reject("Pas de derni\xE8re page");
     }
@@ -5803,18 +5805,30 @@
   // Photobox-Hennequin-Eva/js/gallery_ui.js
   var import_handlebars2 = __toESM(require_handlebars());
   function displayGallery(galleryData) {
-    const container = document.querySelector("#galerie");
+    const container = document.getElementById("galerie");
     container.innerHTML = "";
     const templateSource = document.getElementById("galleryTemplate").innerHTML;
     const template = import_handlebars2.default.compile(templateSource);
     galleryData.photos.forEach((photo) => {
       const data = {
+        // Préparation des données pour le template
         titre: photo.photo.titre,
         id: photo.photo.id,
         thumbnail: "https://webetu.iutnc.univ-lorraine.fr/" + photo.photo.thumbnail.href
+        // URL de la miniature (étudier avec Postman)
       };
       const html = template(data);
-      container.insertAdjacentHTML("beforeend", html);
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = html;
+      const inserted = tempDiv.firstElementChild;
+      const image = inserted.querySelector("img");
+      if (image) {
+        image.addEventListener("click", () => {
+          console.log("Chargement de la photo avec l'ID :", data.id);
+          getPicture(data.id);
+        });
+      }
+      container.appendChild(inserted);
     });
     document.getElementById("btn-next").disabled = !galleryData.links.next;
     document.getElementById("btn-prev").disabled = !galleryData.links.prev;
@@ -5826,16 +5840,15 @@
   function getPicture(id) {
     loadPicture(id).then((photo) => {
       displayPicture(photo);
-      console.log(photo);
       return Promise.all([photo, getCategorie(photo)]);
     }).then(([photo, cate]) => {
       displayCategorie(cate);
       return getCommentaires(photo);
     }).then((com) => {
-      console.log(com);
       displayCommentaires(com);
     }).catch(
       (error) => console.error("Impossible de r\xE9cup\xE9rer la photo :", error)
+      // Gestion des erreurs
     );
   }
   function getCategorie(donnees) {
@@ -5847,9 +5860,12 @@
     return loadRessource(com);
   }
   getPicture(105);
+  load();
   document.getElementById("load_gallery").addEventListener("click", () => {
     console.log("Chargement de la galerie");
-    load().then((galerie) => displayGallery(galerie)).catch((err) => console.error("Erreur lors du chargement de la galerie :", err));
+    load().then((galerie) => displayGallery(galerie)).catch(
+      (err) => console.error("Erreur lors du chargement de la galerie :", err)
+    );
   });
   window.addEventListener("hashchange", () => {
     const id = window.location.hash.substring(1);

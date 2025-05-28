@@ -1,47 +1,49 @@
 import { loadRessource } from "./photoloader";
 
-let currentLinks = {};
+let liensGallerie = {}; // Variable pour stocker les liens de navigation de la galerie
 
-export async function loadGallery(uri = "/www/canals5/phox/api/photos") {
-  const gallery = await loadRessource(uri);
-  currentLinks = gallery.links;
+export async function loadGallery(uri = "/www/canals5/phox/api/photos") { // Fonction pour charger la galerie
+  const gallery = await loadRessource(uri); // Appel de la fonction pour charger les ressources de la galerie
+  liensGallerie = gallery.links;
   return gallery;
 }
 
-export async function load() {
+export async function load() { // Fonction pour charger la galerie 
   return loadGallery(); 
 }
 
 
 // Fonctions de navigation
 export function next() {
-  if (currentLinks.next) {
-    return loadGallery(currentLinks.next.href);
+  if (liensGallerie.next) {
+    return loadGallery(liensGallerie.next.href); // Vérification de l'existence du lien "next"
   } else {
-    return Promise.reject("Pas de page suivante");
+    return Promise.reject("Pas de page suivante"); // Si le lien "next" n'existe pas, on rejette la promesse
   }
 }
 
+// Pareil pour les autres fonctions de navigation
 export function prev() {
-  if (currentLinks.prev) {
-    return loadGallery(currentLinks.prev.href);
+  if (liensGallerie.prev) {
+    return loadGallery(liensGallerie.prev.href);
   } else {
     return Promise.reject("Pas de page précédente");
   }
 }
 
 export function first() {
-  if (currentLinks.first) {
-    return loadGallery(currentLinks.first.href);
+  if (liensGallerie.first) {
+    return loadGallery(liensGallerie.first.href);
   } else {
     return Promise.reject("Pas de première page");
   }
 }
 
 export function last() {
-  if (currentLinks.last) {
-    return loadGallery(currentLinks.last.href);
+  if (liensGallerie.last) {
+    return loadGallery(liensGallerie.last.href);
   } else {
     return Promise.reject("Pas de dernière page");
   }
 }
+

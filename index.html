@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-	<meta charset="UTF-8">
-	<title>index td6 : fetch</title>
-	<link rel="stylesheet" href="css/index.css">
+  <meta charset="UTF-8">
+  <title>TD6 - Photobox avec Fetch</title>
+  <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-	<main id="photo">
-		<h1>Photo : 105</h1>
+  <main>
+    <!-- ===================== PHOTO EN DÉTAIL ===================== -->
+    <section id="la_photo" class="container">
+      <h1>Photobox</h1>
+      <div id="photoContainer"></div>
+      <div id="categorieContainer"></div>
+      <div id="commentaireContainer"></div>
+    </section>
 
-		<section id="la_photo">
-			<img src="">
-			<h4>titre</h4>
-			<p>description</p>
-			<p>type, defX x defY</p>
-			<h4 id="la_categorie">categorie : categorie de l'image</h4>
-			<h4>commentaires : </h4>
-			<ul id="les_commentaires">
-				<li>pseudo : Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, vitae.</li>
-				<li>pseudo : Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, recusandae.</li>
-			</ul>
+    <!-- ===================== GALERIE ===================== -->
+    <section id="la_galerie" class="container">
+      <h2>Galerie</h2>
 
-		</section>
-	</main>
+      <!-- Boutons de navigation -->
+      <div class="gallery-nav">
+        <button id="load_gallery">Charger galerie</button>
+        <button id="btn-first">⏮</button>
+        <button id="btn-prev">◀</button>
+        <button id="btn-next">▶</button>
+        <button id="btn-last">⏭</button>
+      </div>
 
-	<!-- Template de la photo -->
-	<script id="photoTemplate" type="text/x-handlebars-template">
+      <!-- Contenu dynamique de la galerie -->
+      <div id="galerie"></div>
+    </section>
+  </main>
+
+  <!-- ===================== TEMPLATES ===================== -->
+
+  <!-- Template d'affichage d'une photo -->
+  <script id="photoTemplate" type="text/x-handlebars-template">
+    <h2>Photo n°{{id}}</h2>
     <img src="{{url}}" alt="{{titre}}">
     <h4>{{titre}}</h4>
     <p>{{description}}</p>
@@ -35,41 +46,29 @@
     <h4 id="la_categorie"></h4> 
     <h4>Commentaires :</h4>
     <ul id="les_commentaires"></ul>
-</script>
+  </script>
 
-	<!-- Template de la catégorie -->
-	<script id="cateTemplate" type="text/x-handlebars-template">
+  <!-- Template d'affichage d'une catégorie -->
+  <script id="cateTemplate" type="text/x-handlebars-template">
     Catégorie : {{nom}}, {{id}}, {{description}}
-</script>
+  </script>
 
-	<!-- Template du commentaire -->
-	<script id="comTemplate" type="text/x-handlebars-template">
-	{{#each commentaires}}
-		<li>({{pseudo}}) {{content}}</li>
-	{{/each}}
-</script>
+  <!-- Template des commentaires -->
+  <script id="comTemplate" type="text/x-handlebars-template">
+    {{#each commentaires}}
+      <li>({{pseudo}}) {{content}}</li>
+    {{/each}}
+  </script>
 
-	<!-- Template de la gallery -->
-	<button id="load_gallery">Charger galerie</button>
+  <!-- Template d'une vignette de la galerie -->
+  <script id="galleryTemplate" type="text/x-handlebars-template">
+    <div class="vignette">
+      <img src="{{thumbnail}}" alt="{{titre}}" data-photoid="{{id}}">
+    </div>
+  </script>
 
-	<button id="btn-first">⏮</button>
-	<button id="btn-prev">◀</button>
-	<button id="btn-next">▶</button>
-	<button id="btn-last">⏭</button>
-
-
-	<script id="galleryTemplate" type="text/x-handlebars-template">
-  <div class="vignette">
-    <img src="{{thumbnail}}" alt="{{titre}}" data-photoid="{{id}}">
-  </div>
-</script>
-
-	<div id="galerie"></div>
-
-
-
-	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-	<script type="module" src='out.js' defer></script>
+  <!-- ===================== SCRIPTS ===================== -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script type="module" src="out.js" defer></script>
 </body>
-
 </html>

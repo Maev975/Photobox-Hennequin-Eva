@@ -2,3 +2,110 @@ img {
     max-width: 30rem;
     height: auto;
 }
+
+/* Général */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* TITRES */
+h1, h2, h4 {
+  color: #2c3e50;
+}
+
+/* GALERIE */
+#la_galerie {
+  margin-top: 2rem;
+}
+
+.gallery-nav {
+  margin: 1rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gallery-nav button {
+  padding: 0.5rem 1rem;
+  background-color: #3498db;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.gallery-nav button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.gallery-nav button:disabled {
+  background-color: #bdc3c7;
+  cursor: default;
+}
+
+/* PHOTO */
+#galerie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.vignette {
+  width: 150px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.vignette:hover {
+  transform: scale(1.05);
+}
+
+.vignette img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* PHOTO EN DÉTAIL */
+#la_photo {
+  background: white;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#photoContainer img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+#categorieContainer, #commentaireContainer {
+  margin-top: 1.5rem;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
